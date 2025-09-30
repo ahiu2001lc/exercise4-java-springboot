@@ -7,6 +7,7 @@ import com.example.exercise4.exception.ExceptionMessages;
 import com.example.exercise4.mapper.RoleMapper;
 import com.example.exercise4.repository.RoleRepository;
 import com.example.exercise4.service.redis.RedisService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class RoleServiceImpl implements RoleService{
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
     private final RedisService redisService;
+    private final ObjectMapper objectMapper;
 
     @Transactional(readOnly = true)
     public RoleResponse getRole(Long id){
@@ -25,7 +27,7 @@ public class RoleServiceImpl implements RoleService{
         Object cached = redisService.hashMap("roles", redisKey);
 
         if (cached != null) {
-            return (RoleResponse) cached; // trả dữ liệu từ Redis
+            return objectMapper.convertValue(cached, RoleResponse.class);
         }
         RoleEntity role = roleRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException(ExceptionMessages.NOT_FOUND + " " + id));
