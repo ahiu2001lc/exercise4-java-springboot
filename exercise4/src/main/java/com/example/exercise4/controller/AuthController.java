@@ -2,6 +2,7 @@ package com.example.exercise4.controller;
 
 import com.example.exercise4.component.JwtTokenProvider;
 import com.example.exercise4.dto.request.LoginRequest;
+import com.example.exercise4.dto.response.LoginResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,13 +27,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request){
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request){
         var auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
         String role = auth.getAuthorities().iterator().next().getAuthority();
         String token = jwtTokenProvider.generateToken(request.getUsername(), role);
-        return ResponseEntity.ok(Map.of("token", token));
+        return ResponseEntity.ok(new LoginResponse(token));
     }
 }

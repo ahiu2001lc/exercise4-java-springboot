@@ -36,7 +36,7 @@
         <!-- sonarQube -->
         <sonar.projectKey>exercise4</sonar.projectKey>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
-        <sonar.login>squ_634fb1fb0ac9f094e99e7db45cd9be8b49d49fdf</sonar.login>
+
     </properties>
 	<dependencies>
 		<dependency>
@@ -57,6 +57,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+
+        <!-- Redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>4.4.1</version>
+            <type>jar</type>
+        </dependency>
 
         <!-- validate -->
 		<dependency>

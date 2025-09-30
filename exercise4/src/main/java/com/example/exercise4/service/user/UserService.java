@@ -12,6 +12,8 @@ public interface UserService {
 
     UserResponse getProfile(String username);
 
+    UserResponse findUser(Long id);
+
     EchoResponse echo(Authentication auth, String msg);
 
     UserResponse createUser(UserRequest request);

@@ -9,8 +9,8 @@ import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long validityInMs = 3600000;
+    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final long validityInMs = 3600000;
 
     public String generateToken(String username, String role) {
         Date now = new Date();

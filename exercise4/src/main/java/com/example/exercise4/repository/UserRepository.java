@@ -27,4 +27,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findAll();
 
     Page<UserEntity> findByUsernameContainingIgnoreCase(String username, Pageable pageable);
+
+    @Query("SELECT u FROM UserEntity u " +
+            "JOIN FETCH u.userRoles ur " +
+            "JOIN FETCH ur.role r " +
+            "WHERE u.id = :id")
+    Optional<UserEntity> findByIdWithRoles(@Param("id") Long id);
 }

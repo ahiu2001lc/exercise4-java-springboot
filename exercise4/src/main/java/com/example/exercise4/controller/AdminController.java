@@ -56,6 +56,12 @@ public class AdminController {
        return userService.getUsers(page, size, sort, q);
     }
 
+    @GetMapping("/users/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse findUser(@PathVariable Long id){
+        return userService.findUser(id);
+    }
+
     @PutMapping("/users/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse updateUser(

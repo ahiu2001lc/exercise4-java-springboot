@@ -5,4 +5,8 @@ public class ExceptionMessages {
     public static final String BAD_REQUEST = "Duplicated";
     public static final String NOT_FOUND = "Not Found";
     public static final String NOT_ACTIVE = "Not Active";
+
+    private ExceptionMessages() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 }

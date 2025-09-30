@@ -13,6 +13,9 @@ import com.example.exercise4.exception.ExceptionMessages;
 import com.example.exercise4.mapper.UserMapper;
 import com.example.exercise4.repository.RoleRepository;
 import com.example.exercise4.repository.UserRepository;
+import com.example.exercise4.service.redis.RedisService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,13 +39,46 @@ public class UserServiceImpl implements UserService{
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RedisService redisService;
+    private final ObjectMapper objectMapper;
 
     @Transactional(readOnly = true)
     public UserResponse getProfile(String username) {
-        UserEntity user = userRepository.findByUsernameWithRoles(username)
-                .orElseThrow(()-> new EntityNotFoundException(ExceptionMessages.NOT_FOUND));
+        String redisKey = "name:" + username;
+        Object cached = redisService.hashMap("users", redisKey);
 
-        return userMapper.toResponse(user);
+        if (cached != null) {
+            return objectMapper.convertValue(cached, UserResponse.class);
+        }
+
+        UserEntity user = userRepository.findByUsernameWithRoles(username)
+                .orElseThrow(()-> new EntityNotFoundException(ExceptionMessages.NOT_FOUND +" "+ username));
+
+        UserResponse response = userMapper.toResponse(user);
+
+        redisService.hashSet("users", redisKey, response);
+        redisService.setTimeToLive("users", 1);
+
+        return response;
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponse findUser(Long id){
+        String redisKey = "user:" + id;
+        Object cached = redisService.hashMap("users", redisKey);
+
+        if(cached != null){
+            return objectMapper.convertValue(cached, UserResponse.class);
+        }
+
+        UserEntity user = userRepository.findByIdWithRoles(id)
+                .orElseThrow(()-> new EntityNotFoundException(ExceptionMessages.NOT_FOUND+" "+id));
+
+        UserResponse response = userMapper.toResponse(user);
+
+        redisService.hashSet("users", redisKey, response);
+
+        return response;
     }
 
     public EchoResponse echo(Authentication auth, String msg) {
@@ -74,11 +109,23 @@ public class UserServiceImpl implements UserService{
 
         user.setUserRoles(userRoles);
         user = userRepository.save(user);
-        return userMapper.toResponse(user);
+        UserResponse response = userMapper.toResponse(user);
+
+        String redisKey = "user:" + user.getId();
+        redisService.hashSet("users", redisKey, response);
+
+        return response;
     }
 
     @Transactional(readOnly = true)
     public PageResponse<UserResponse> getUsers(int page, int size, String sort, String q) {
+        String redisKey = "users:" + page + ":" + size + ":" + sort + ":" + (q == null ? "" : q);
+
+        Object cached = redisService.hashMap("users", redisKey);
+        if (cached != null) {
+            return objectMapper.convertValue(cached, new TypeReference<PageResponse<UserResponse>>() {});
+        }
+
         String[] sortParams = sort.split(",");
         String sortField = sortParams[0];
         Sort.Direction direction = sortParams.length > 1 ? Sort.Direction.fromString(sortParams[1]) : Sort.Direction.ASC;
@@ -104,6 +151,8 @@ public class UserServiceImpl implements UserService{
         response.setTotalElements(userResponsePage.getTotalElements());
         response.setTotalPages(userResponsePage.getTotalPages());
 
+        redisService.hashSet("users", redisKey, response);
+
         return response;
     }
 
@@ -124,6 +173,7 @@ public class UserServiceImpl implements UserService{
                     .collect(Collectors.toSet());
 
             user.getUserRoles().clear();
+            userRepository.flush();
             for (RoleEntity roleEntity : validateRoles){
                 UserRoleEntity ur = new UserRoleEntity();
                 ur.setUser(user);
@@ -133,7 +183,13 @@ public class UserServiceImpl implements UserService{
         }
 
         UserEntity saved = userRepository.save(user);
-        return userMapper.toResponse(saved);
+        UserResponse response = userMapper.toResponse(saved);
+
+        String redisKey = "users:" + id;
+        redisService.delete("users", redisKey);
+        redisService.hashSet("users", redisKey, response);
+
+        return response;
     }
 
     @Transactional
@@ -153,6 +209,11 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(()-> new EntityNotFoundException(ExceptionMessages.NOT_FOUND + " " + id));
 
         user.setEnabled(0);
-        userRepository.save(user);
+        UserEntity saved = userRepository.save(user);
+        UserResponse response = userMapper.toResponse(saved);
+
+        String redisKey = "user:" + id;
+        redisService.delete("users", redisKey);
+        redisService.hashSet("users", redisKey, response);
     }
 }
