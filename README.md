@@ -78,5 +78,3 @@ docker ps
 
 curl http://localhost:8080/actuator/health
 -> {"status":"UP"}
-
-#Chạy sonarQube
