@@ -13,4 +13,8 @@ public class PublicController {
         return Map.of("pong", true);
     }
 
+    @GetMapping("/hello")
+    public String hello(){
+        return "Hello from Alice!";
+    }
 }
