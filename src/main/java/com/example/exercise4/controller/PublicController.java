@@ -20,6 +20,6 @@ public class PublicController {
 
     @GetMapping("/bye")
     public String bye(){
-        return "Goodbye from Bob!";
+        return "See you again!";
     }
 }
