@@ -17,4 +17,9 @@ public class PublicController {
     public String hello(){
         return "Hello from Alice!";
     }
+
+    @GetMapping("/bye")
+    public String bye(){
+        return "Goodbye from Alice!";
+    }
 }
