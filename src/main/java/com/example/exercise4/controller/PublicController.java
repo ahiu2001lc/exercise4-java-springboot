@@ -22,9 +22,4 @@ public class PublicController {
     public String bye(){
         return "Goodbye from Bob!";
     }
-
-    @GetMapping("/bye")
-    public String bye(){
-        return "Goodbye from Alice!";
-    }
 }
