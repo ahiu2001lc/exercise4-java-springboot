@@ -15,7 +15,7 @@ public class PublicController {
 
     @GetMapping("/hello")
     public String hello(){
-        return "Hello from Alice!";
+        return "Welcome from Alice!";
     }
 
     @GetMapping("/bye")
