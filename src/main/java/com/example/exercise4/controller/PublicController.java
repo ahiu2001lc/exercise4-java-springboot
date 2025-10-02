@@ -2,6 +2,7 @@ package com.example.exercise4.controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -21,5 +22,10 @@ public class PublicController {
     @GetMapping("/bye")
     public String bye(){
         return "Goodbye from Bob!";
+    }
+
+    @GetMapping("/time")
+    public LocalDateTime time(){
+        return LocalDateTime.now();
     }
 }
