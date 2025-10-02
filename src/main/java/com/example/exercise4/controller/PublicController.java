@@ -21,7 +21,7 @@ public class PublicController {
 
     @GetMapping("/bye")
     public String bye(){
-        return "See you again!";
+        return "See you again: Alice!";
     }
 
     @GetMapping("/time")
