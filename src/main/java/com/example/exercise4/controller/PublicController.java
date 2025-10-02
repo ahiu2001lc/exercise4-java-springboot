@@ -25,7 +25,7 @@ public class PublicController {
     }
 
     @GetMapping("/time")
-    public LocalDateTime time(){
-        return LocalDateTime.now();
+    public String time(){
+        return "The time is: " + LocalDateTime.now();
     }
 }
