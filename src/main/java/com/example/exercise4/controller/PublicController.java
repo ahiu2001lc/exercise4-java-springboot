@@ -16,7 +16,7 @@ public class PublicController {
 
     @GetMapping("/hello")
     public String hello(){
-        return "Hello from Java Spring-boot!";
+        return "Hello from Alice!";
     }
 
     @GetMapping("/bye")
