@@ -2,6 +2,7 @@ package com.example.exercise4.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -13,29 +14,30 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter @Setter
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "users")
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    Long id;
 
     @Column(nullable = false, unique = true, length = 64)
-    private String username;
+    String username;
 
     @Column(nullable = false, length = 255)
-    private String password;
+    String password;
 
     @Column(name = "full_name")
-    private String fullName;
+    String fullName;
 
     @Column(nullable = false)
-    private Integer enabled = 1;
+    Integer enabled = 1;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserRoleEntity> userRoles = new HashSet<>();
+    Set<UserRoleEntity> userRoles = new HashSet<>();
 }
