@@ -46,7 +46,7 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN', 'SECURITY')")
     public PageResponse<UserResponse> getUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -57,7 +57,7 @@ public class AdminController {
     }
 
     @GetMapping("/users/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN', 'SECURITY')")
     public UserResponse findUser(@PathVariable Long id){
         return userService.findUser(id);
     }
