@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtTokenProvider {
@@ -25,13 +26,14 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(String username, String role) {
+    public String generateToken(String username, List<String> roles) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + validityInMs);
+        String rolesString = String.join(",", roles);
 
         return Jwts.builder()
                 .setSubject(username)
-                .claim("role", role)
+                .claim("roles", rolesString)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key)
@@ -43,9 +45,19 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
-    public String getRole(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build()
-                .parseClaimsJws(token).getBody().get("role", String.class);
+    public List<String> getRoles(String token) {
+        String rolesString = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("roles", String.class);
+
+        if (rolesString == null || rolesString.isEmpty()) {
+            return List.of();
+        }
+
+        return List.of(rolesString.split(","));
     }
 
     public boolean validateToken(String token) {
