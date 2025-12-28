@@ -7,46 +7,30 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
 @Builder
+@Setter @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "users")
-public class UserEntity {
+@Table(name = "document_urgency")
+public class DocumentUrgencyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    Long userId;
+    @Column(name = "urgency_id")
+    Long urgencyId;
 
     @Column(nullable = false, unique = true, length = 64)
-    String username;
+    String name;
 
-    @Column(nullable = false, length = 255)
-    String password;
+    @Column(name = "content")
+    String content;
 
-    @Column(name = "full_name")
-    String fullName;
-
-    @Column(name = "phone_number")
-    String phoneNumber;
-
-    @Column(name = "email")
-    String email;
-
-    @Column(name = "birthday")
-    String birthday;
-
-    @Column(name = "address")
-    String address;
-
-    @Column(name = "employee_id")
-    Long employeeId;
-
-    @Column(nullable = false)
+    @Column(name = "enabled", nullable = false)
     Integer enabled = 1;
 
     @CreationTimestamp

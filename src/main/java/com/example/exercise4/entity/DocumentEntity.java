@@ -7,47 +7,46 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
 @Builder
+@Setter @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "users")
-public class UserEntity {
+@Table(name = "documents")
+public class DocumentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    Long userId;
+    @Column(name = "document_id")
+    Long documentId;
 
-    @Column(nullable = false, unique = true, length = 64)
-    String username;
+    @Column(name = "type_id", nullable = false)
+    Long typeId;
 
-    @Column(nullable = false, length = 255)
-    String password;
+    @Column(name = "code")
+    String code;
 
-    @Column(name = "full_name")
-    String fullName;
+    @Column(name = "content")
+    String content;
 
-    @Column(name = "phone_number")
-    String phoneNumber;
+    @Column(name = "stype_id")
+    Long stypeId;
 
-    @Column(name = "email")
-    String email;
+    @Column(name = "status_id")
+    Long statusId;
 
-    @Column(name = "birthday")
-    String birthday;
+    @Column(name = "signer_id")
+    Long signerId;
 
-    @Column(name = "address")
-    String address;
+    @Column(name = "urgency_id")
+    Long urgencyId;
 
-    @Column(name = "employee_id")
-    Long employeeId;
-
-    @Column(nullable = false)
-    Integer enabled = 1;
+    @Column(name = "department_id", nullable = false)
+    Long departmentId;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

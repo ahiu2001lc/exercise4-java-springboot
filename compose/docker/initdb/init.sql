@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS documents (
     document_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     type_id BIGINT NOT NULL,
     code VARCHAR(64),
-    content VARCHAR,
+    content TEXT,
     stype_id BIGINT,
     status_id BIGINT,
     signer_id BIGINT,
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS documents (
 CREATE TABLE IF NOT EXISTS document_type (
     type_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(64) NOT NULL UNIQUE,
-    content VARCHAR,
+    content TEXT,
     enabled INT(1) DEFAULT 1 NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by VARCHAR(128),
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS document_type (
 CREATE TABLE IF NOT EXISTS document_stype (
     stype_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(64) NOT NULL UNIQUE,
-    content VARCHAR,
+    content TEXT,
     enabled INT(1) DEFAULT 1 NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by VARCHAR(128),
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS document_receiver_map (
     receiver_date DATE,
     promulgate_date DATE,
     deadline_date DATE,
-    comment VARCHAR,
+    comment TEXT,
     updated_at TIMESTAMP,
     updated_by VARCHAR(128),
     del_flag INT(1),
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS document_receiver_map (
 CREATE TABLE IF NOT EXISTS document_status (
     status_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(64) NOT NULL UNIQUE,
-    content VARCHAR,
+    content TEXT,
     enabled INT(1) DEFAULT 1 NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by VARCHAR(128),
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS document_status (
 CREATE TABLE IF NOT EXISTS document_urgency (
     urgency_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(64) NOT NULL UNIQUE,
-    content VARCHAR,
+    content TEXT,
     enabled INT(1) DEFAULT 1 NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_by VARCHAR(128),

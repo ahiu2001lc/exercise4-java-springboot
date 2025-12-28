@@ -26,9 +26,4 @@ public class UserRoleEntity {
     @JoinColumn(name = "role_id", nullable = false)
     RoleEntity role;
 
-    public UserRoleEntity(UserEntity user, RoleEntity role){
-        this.user = user;
-        this.role = role;
-        this.id = new UserRoleId(user != null ? user.getId() : null, role != null ? role.getId() : null);
-    }
 }

@@ -14,37 +14,22 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "users")
-public class UserEntity {
+@Table(name = "employees")
+public class EmployeeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    Long userId;
-
-    @Column(nullable = false, unique = true, length = 64)
-    String username;
-
-    @Column(nullable = false, length = 255)
-    String password;
-
-    @Column(name = "full_name")
-    String fullName;
-
-    @Column(name = "phone_number")
-    String phoneNumber;
-
-    @Column(name = "email")
-    String email;
-
-    @Column(name = "birthday")
-    String birthday;
-
-    @Column(name = "address")
-    String address;
-
     @Column(name = "employee_id")
     Long employeeId;
+
+    @Column(name = "user_id", nullable = false)
+    Long userId;
+
+    @Column(name = "role_id", nullable = false)
+    Long roleId;
+
+    @Column(name = "department_id", nullable = false)
+    Long departmentId;
 
     @Column(nullable = false)
     Integer enabled = 1;

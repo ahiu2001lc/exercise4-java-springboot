@@ -34,7 +34,7 @@ docker compose -f compose/docker-compose.redis.yml ps
 -> {"status":"UP"}
 
 - Database:
-  docker exec -it mariadb_redis mysql -u root -proot123 -e "USE authorization; SELECT * FROM users;"
+  docker exec -it mariadb mysql -u root -proot123 -e "USE project1; SELECT * FROM users;"
 
 # Log backend hoặc mariaDB
 - backend: docker logs -f backend
